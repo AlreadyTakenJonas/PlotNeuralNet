@@ -200,6 +200,7 @@ def generate( arch, pathname="file.tex", standalone=True ):
             handle.write(to_head())
             handle.write(to_cor())
             handle.write(r"\begin{document}")
+            handle.write("\n")
             
         handle.write(r"""\begin{tikzpicture}
                      \tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
@@ -207,9 +208,11 @@ def generate( arch, pathname="file.tex", standalone=True ):
                      """)
         for snippet in arch:
             handle.write(snippet)
-        handle.write("\end{tikzpicture}")
+        handle.write(r"\end{tikzpicture}")
+        handle.write("\n")
         
         if standalone:
-            handle.write("r\end{document}")
+            handle.write(r"\end{document}")
+            handle.write("\n")
 
 
