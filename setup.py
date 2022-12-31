@@ -4,7 +4,7 @@
 if __name__ == "__main__":
     from setuptools import setup, find_packages
     from pathlib import Path
-    layerFiles = [str(f) for f in (Path(__file__).parent / "layers").glob("*")]
+    layerFiles = [str(f) for f in (Path(__file__).parent /"PlotNeuralNetPy/layers").glob("*")]
 
     setup(
 	packages=find_packages(),
