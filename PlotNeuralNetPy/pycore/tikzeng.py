@@ -184,13 +184,6 @@ def to_skip( of, to, pos=1.25):
 -- node {\copymidarrow}("""+to+"""-top)
 -- node {\copymidarrow} ("""+to+"""-north);
 """
-
-
-def to_generate( arch, pathname="file.tex" ):
-    with open(pathname, "w") as f: 
-        for c in arch:
-            print(c)
-            f.write( c )
      
         
 def writePreamble(pathname="preamble.tex"):
