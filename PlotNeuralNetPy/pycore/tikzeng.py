@@ -5,11 +5,11 @@ from pathlib import Path
 def to_head( projectpath=Path(__file__).parent.parent ):
     pathlayers = os.path.join( projectpath, 'layers/' ).replace('\\', '/')
     return r"""
-\documentclass[border=8pt, multi, tikz]{standalone} 
 \usepackage{import}
 \subimport{"""+ pathlayers + r"""}{init}
 \usetikzlibrary{positioning}
-\usetikzlibrary{3d} %for including external image 
+\usetikzlibrary{3d} %for including external image
+\newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width=0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}
 """
 
 def to_cor():
@@ -22,16 +22,6 @@ def to_cor():
 \def\FcReluColor{rgb:blue,5;red,5;white,4}
 \def\SoftmaxColor{rgb:magenta,5;black,7}   
 \def\SumColor{rgb:blue,5;green,15}
-"""
-
-def to_begin():
-    return r"""
-\newcommand{\copymidarrow}{\tikz \draw[-Stealth,line width=0.8mm,draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}
-
-\begin{document}
-\begin{tikzpicture}
-\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
-\tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
 """
 
 # layers definition
@@ -195,12 +185,6 @@ def to_skip( of, to, pos=1.25):
 -- node {\copymidarrow} ("""+to+"""-north);
 """
 
-def to_end():
-    return r"""
-\end{tikzpicture}
-\end{document}
-"""
-
 
 def to_generate( arch, pathname="file.tex" ):
     with open(pathname, "w") as f: 
@@ -208,5 +192,31 @@ def to_generate( arch, pathname="file.tex" ):
             print(c)
             f.write( c )
      
+        
+def writePreamble(pathname="preamble.tex"):
+    pathname = Path(pathname)
+    with pathname.open("w") as handle:
+        handle.write(to_head())
+        handle.write(to_cor())
+    return r"\include{"+pathname.parent/pathname.name+"}"
+
+def generate( arch, pathname="file.tex", standalone=True ):
+    with open(pathname, "w") as handle:
+        if standalone:
+            handle.write(r"\documentclass[border=8pt, multi, tikz]{standalone}")
+            handle.write(to_head())
+            handle.write(to_cor())
+            handle.write(r"\begin{document}")
+            
+        handle.write(r"""\begin{tikzpicture}
+                     \tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
+                     \tikzstyle{copyconnection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.7]
+                     """)
+        for snippet in arch:
+            handle.write(snippet)
+        handle.write("\end{tikzpicture}")
+        
+        if standalone:
+            handle.write("r\end{document}")
 
 
