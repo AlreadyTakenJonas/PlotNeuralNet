@@ -1,5 +1,5 @@
 
-import sys
+from pathlib import Path
 from ..pycore.tikzeng import *
 
 # defined your arch
@@ -16,8 +16,8 @@ arch = [
     ]
 
 def main():
-    namefile = str(sys.argv[0]).split('.')[0]
-    generate(arch, namefile + '.tex' )
+    namefile = Path.cwd()/"test_simple.tex"
+    generate(arch, namefile)
 
 if __name__ == '__main__':
     main()

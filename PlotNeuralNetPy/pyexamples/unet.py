@@ -1,5 +1,5 @@
 
-import sys
+from pathlib import Path
 from ..pycore.tikzeng import *
 from ..pycore.blocks  import *
 
@@ -37,8 +37,8 @@ arch = [
 
 
 def main():
-    namefile = str(sys.argv[0]).split('.')[0]
-    generate(arch, namefile + '.tex' )
+    namefile = Path.cwd()/"unet.tex"
+    generate(arch, namefile )
 
 if __name__ == '__main__':
     main()
